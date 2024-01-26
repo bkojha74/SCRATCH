@@ -7,15 +7,15 @@ import (
 
 	"github.com/bkojha74/rssagg/router"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 func main() {
 	godotenv.Load(".env")
 
 	portString := os.Getenv("PORT")
-
 	if portString == "" {
-		log.Fatal("$PORT must be set")
+		log.Fatal("PORT is not found in the environment")
 	}
 
 	srv := &http.Server{
