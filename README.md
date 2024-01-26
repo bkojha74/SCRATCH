@@ -8,6 +8,7 @@ It interacts with PostgreSQL database.
 
 # Software required
 - Golang
+- Keycloak (https://www.keycloak.org/)
 - PostgreSQL with pgAdmin4 or any other GUI tool for database management.
 - Sqlc (https://github.com/sqlc-dev/sqlc)
 - Goose (https://github.com/pressly/goose)
