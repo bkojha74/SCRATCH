@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/bkojha74/rssagg/internal/auth"
 	"github.com/bkojha74/rssagg/internal/database"
 	"github.com/bkojha74/rssagg/models"
 	"github.com/google/uuid"
@@ -86,6 +87,22 @@ func (apiCfg *DBConfig) CreateUserHandler(w http.ResponseWriter, r *http.Request
 	})
 	if err != nil {
 		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not ceate user:%s", err.Error()))
+		return
+	}
+
+	RespondWithJson(w, http.StatusCreated, models.DatabaseUserMap(user))
+}
+
+func (apiCfg *DBConfig) GetUserHandler(w http.ResponseWriter, r *http.Request) {
+	apiKey, err := auth.GetApiKey(r.Header)
+	if err != nil {
+		RespondWithError(w, http.StatusForbidden, fmt.Sprintf("Auth error:%s", err.Error()))
+		return
+	}
+
+	user, err := apiCfg.DB.GetUser(r.Context(), apiKey)
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not get user:%s", err.Error()))
 		return
 	}
 

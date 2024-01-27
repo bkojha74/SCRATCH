@@ -19,6 +19,7 @@ func NewRouter() *mux.Router {
 	s := mux.NewRouter().PathPrefix("/api").Subrouter()
 	s.HandleFunc("/hello", helper.MessageHandler).Methods("GET")
 	s.HandleFunc("/users", db.CreateUserHandler).Methods("POST")
+	s.HandleFunc("/users", db.GetUserHandler).Methods("GET")
 	s.Use(middleware.HttpLogger)
 
 	router.PathPrefix("/api").Handler(s)

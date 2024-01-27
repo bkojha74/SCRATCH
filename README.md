@@ -18,6 +18,7 @@ It interacts with PostgreSQL database.
 - Clone this repository
 - Open terminal and go to the project directory
 - Run `go mod tidy`
+- Run `go mod vendor`
 - Run `go run .`
 
 # Structure
@@ -32,8 +33,16 @@ SCRATCH
 ├─ main.go
 ├─ middleware
 │  └─ middleware.go
+├─ models
+│  └─ models.go
 ├─ README.md
 ├─ router
 │  └─ router.go
+├─ sql
+│  ├─ queries
+│  │  └─ users.sql
+│  └─ schema
+│     └─ 001_users.sql
+└─ sqlc.yaml
 
 ```
