@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/bkojha74/rssagg/internal/auth"
+	"github.com/bkojha74/rssagg/auth"
 	"github.com/bkojha74/rssagg/internal/database"
 	"github.com/bkojha74/rssagg/models"
 	"github.com/google/uuid"
