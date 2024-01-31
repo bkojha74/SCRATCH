@@ -70,3 +70,11 @@ func DatabaseFeedFollowMap(dbFeedFollow database.FeedFollow) FeedFollow {
 		FeedID:    dbFeedFollow.FeedID,
 	}
 }
+
+func DatabaseFeedFollowersMap(dbFeedFollows []database.FeedFollow) []FeedFollow {
+	var feedFollows []FeedFollow
+	for _, feedFollow := range dbFeedFollows {
+		feedFollows = append(feedFollows, DatabaseFeedFollowMap(feedFollow))
+	}
+	return feedFollows
+}

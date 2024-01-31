@@ -13,6 +13,7 @@ import (
 	"github.com/bkojha74/rssagg/internal/database"
 	"github.com/bkojha74/rssagg/models"
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 type authHanlder func(http.ResponseWriter, *http.Request, database.User)
@@ -154,7 +155,7 @@ func (apiCfg *DBConfig) GetFeedHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	RespondWithJson(w, http.StatusCreated, models.DatabaseFeedersMap(feeds))
+	RespondWithJson(w, http.StatusOK, models.DatabaseFeedersMap(feeds))
 }
 
 func (apiCfg *DBConfig) CreateFeedFollowHandler(w http.ResponseWriter, r *http.Request, user database.User) {
@@ -183,4 +184,36 @@ func (apiCfg *DBConfig) CreateFeedFollowHandler(w http.ResponseWriter, r *http.R
 	}
 
 	RespondWithJson(w, http.StatusCreated, models.DatabaseFeedFollowMap(feedFollow))
+}
+
+func (apiCfg *DBConfig) GetFeedFollowsHandler(w http.ResponseWriter, r *http.Request, user database.User) {
+	feedFollows, err := apiCfg.DB.GetFeedFollows(r.Context(), user.ID)
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not get feedFollows:%s", err.Error()))
+		return
+	}
+
+	RespondWithJson(w, http.StatusOK, models.DatabaseFeedFollowersMap(feedFollows))
+}
+
+func (apiCfg *DBConfig) DeleteFeedFollowHandler(w http.ResponseWriter, r *http.Request, user database.User) {
+	params := mux.Vars(r)
+	feedFollowID := params["feed_follow_id"]
+
+	id, err := uuid.Parse(feedFollowID)
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not get feedFollows:%s", err.Error()))
+		return
+	}
+
+	err = apiCfg.DB.DeleteFeedFollow(r.Context(), database.DeleteFeedFollowParams{
+		ID:     uuid.UUID(id),
+		UserID: user.ID,
+	})
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not create feedFollow:%s", err.Error()))
+		return
+	}
+
+	RespondWithJson(w, http.StatusOK, struct{}{})
 }
