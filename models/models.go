@@ -44,3 +44,11 @@ func DatabaseFeederMap(dbFeed database.Feed) Feed {
 		UserID:    dbFeed.UserID,
 	}
 }
+
+func DatabaseFeedersMap(dbFeed []database.Feed) []Feed {
+	var feeds []Feed
+	for _, feed := range dbFeed {
+		feeds = append(feeds, DatabaseFeederMap(feed))
+	}
+	return feeds
+}
