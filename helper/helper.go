@@ -15,6 +15,8 @@ import (
 	"github.com/google/uuid"
 )
 
+type authHanlder func(http.ResponseWriter, *http.Request, database.User)
+
 type DBConfig struct {
 	DB *database.Queries
 }
@@ -93,18 +95,54 @@ func (apiCfg *DBConfig) CreateUserHandler(w http.ResponseWriter, r *http.Request
 	RespondWithJson(w, http.StatusCreated, models.DatabaseUserMap(user))
 }
 
-func (apiCfg *DBConfig) GetUserHandler(w http.ResponseWriter, r *http.Request) {
-	apiKey, err := auth.GetApiKey(r.Header)
-	if err != nil {
-		RespondWithError(w, http.StatusForbidden, fmt.Sprintf("Auth error:%s", err.Error()))
-		return
-	}
-
-	user, err := apiCfg.DB.GetUser(r.Context(), apiKey)
-	if err != nil {
-		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not get user:%s", err.Error()))
-		return
-	}
-
+func (apiCfg *DBConfig) GetUserHandler(w http.ResponseWriter, r *http.Request, user database.User) {
 	RespondWithJson(w, http.StatusOK, models.DatabaseUserMap(user))
+}
+
+func (apiCfg *DBConfig) MiddlewareAuth(handler authHanlder) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		apiKey, err := auth.GetApiKey(r.Header)
+		if err != nil {
+			RespondWithError(w, http.StatusForbidden, fmt.Sprintf("Auth error:%s", err.Error()))
+			return
+		}
+
+		user, err := apiCfg.DB.GetUser(r.Context(), apiKey)
+		if err != nil {
+			RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not get user:%s", err.Error()))
+			return
+		}
+
+		handler(w, r, user)
+	}
+}
+
+func (apiCfg *DBConfig) CreateFeedHandler(w http.ResponseWriter, r *http.Request, user database.User) {
+	type parameters struct {
+		Name string `json:"name"`
+		URL  string `json:"url"`
+	}
+	decoder := json.NewDecoder(r.Body)
+
+	params := parameters{}
+	err := decoder.Decode(&params)
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Error parsing JSON:%s", err.Error()))
+		return
+	}
+
+	feed, err := apiCfg.DB.CreateFeed(r.Context(), database.CreateFeedParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		Name:      params.Name,
+		Url:       params.URL,
+		UserID:    user.ID,
+	})
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not ceate feed:%s", err.Error()))
+		return
+	}
+
+	RespondWithJson(w, http.StatusCreated, models.DatabaseFeederMap(feed))
 }

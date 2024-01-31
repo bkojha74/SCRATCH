@@ -1,9 +1,14 @@
 -- +goose Up
 
-ALTER TABLE users ADD COLUMN api_key VARCHAR(64) UNIQUE NOT NULL DEFAULT(
-    encode (sha256(random()::TEXT::BYTEA), 'hex')
+CREATE TABLE feeds (
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    name TEXT NOT NULL,
+    url TEXT UNIQUE NOT NULL,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- +goose Down
 
-ALTER TABLE users DROP COLUMN api_key;
+DROP TABLE feeds;
