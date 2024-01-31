@@ -22,6 +22,7 @@ func NewRouter() *mux.Router {
 	s.HandleFunc("/users", db.MiddlewareAuth(db.GetUserHandler)).Methods("GET")
 	s.HandleFunc("/feeds", db.MiddlewareAuth(db.CreateFeedHandler)).Methods("POST")
 	s.HandleFunc("/feeds", db.GetFeedHandler).Methods("GET")
+	s.HandleFunc("/feed_follows", db.MiddlewareAuth(db.CreateFeedFollowHandler)).Methods("POST")
 
 	s.Use(middleware.HttpLogger)
 
