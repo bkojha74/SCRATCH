@@ -95,10 +95,6 @@ func (apiCfg *DBConfig) CreateUserHandler(w http.ResponseWriter, r *http.Request
 	RespondWithJson(w, http.StatusCreated, models.DatabaseUserMap(user))
 }
 
-func (apiCfg *DBConfig) GetUserHandler(w http.ResponseWriter, r *http.Request, user database.User) {
-	RespondWithJson(w, http.StatusOK, models.DatabaseUserMap(user))
-}
-
 func (apiCfg *DBConfig) MiddlewareAuth(handler authHanlder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		apiKey, err := auth.GetApiKey(r.Header)
@@ -115,6 +111,10 @@ func (apiCfg *DBConfig) MiddlewareAuth(handler authHanlder) http.HandlerFunc {
 
 		handler(w, r, user)
 	}
+}
+
+func (apiCfg *DBConfig) GetUserHandler(w http.ResponseWriter, r *http.Request, user database.User) {
+	RespondWithJson(w, http.StatusOK, models.DatabaseUserMap(user))
 }
 
 func (apiCfg *DBConfig) CreateFeedHandler(w http.ResponseWriter, r *http.Request, user database.User) {
@@ -145,4 +145,14 @@ func (apiCfg *DBConfig) CreateFeedHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	RespondWithJson(w, http.StatusCreated, models.DatabaseFeederMap(feed))
+}
+
+func (apiCfg *DBConfig) GetFeedHandler(w http.ResponseWriter, r *http.Request) {
+	feeds, err := apiCfg.DB.GetFeeds(r.Context())
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not ceate feed:%s", err.Error()))
+		return
+	}
+
+	RespondWithJson(w, http.StatusCreated, models.DatabaseFeedersMap(feeds))
 }
