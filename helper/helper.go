@@ -156,3 +156,31 @@ func (apiCfg *DBConfig) GetFeedHandler(w http.ResponseWriter, r *http.Request) {
 
 	RespondWithJson(w, http.StatusCreated, models.DatabaseFeedersMap(feeds))
 }
+
+func (apiCfg *DBConfig) CreateFeedFollowHandler(w http.ResponseWriter, r *http.Request, user database.User) {
+	type parameters struct {
+		FeedID uuid.UUID `json:"feed_id"`
+	}
+	decoder := json.NewDecoder(r.Body)
+
+	params := parameters{}
+	err := decoder.Decode(&params)
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Error parsing JSON:%s", err.Error()))
+		return
+	}
+
+	feedFollow, err := apiCfg.DB.CreateFeedFollow(r.Context(), database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		UserID:    user.ID,
+		FeedID:    params.FeedID,
+	})
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Could not create feedFollow:%s", err.Error()))
+		return
+	}
+
+	RespondWithJson(w, http.StatusCreated, models.DatabaseFeedFollowMap(feedFollow))
+}
