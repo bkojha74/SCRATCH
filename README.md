@@ -34,24 +34,45 @@ It interacts with PostgreSQL database.
 ```
 SCRATCH
 ├─ .gitignore
+├─ auth
+│  └─ auth.go
+├─ backgroundjob
+│  └─ scrapper.go
 ├─ go.mod
 ├─ go.sum
 ├─ helper
 │  └─ helper.go
+├─ internal
+│  └─ database
+│     ├─ db.go
+│     ├─ feeds.sql.go
+│     ├─ feed_follows.sql.go
+│     ├─ models.go
+│     ├─ posts.sql.go
+│     └─ users.sql.go
 ├─ main.go
 ├─ middleware
 │  └─ middleware.go
 ├─ models
-│  └─ models.go
+│  ├─ models.go
+│  └─ rss
+│     └─ rss.go
 ├─ README.md
 ├─ router
 │  └─ router.go
 ├─ sql
 │  ├─ queries
+│  │  ├─ feeds.sql
+│  │  ├─ feed_follows.sql
+│  │  ├─ posts.sql
 │  │  └─ users.sql
 │  └─ schema
 │     ├─ 001_users.sql
-│     └─ 002_users_apikey.sql
+│     ├─ 002_users_apikey.sql
+│     ├─ 003_feeds.sql
+│     ├─ 004_feed_follows.sql
+│     ├─ 005_feeds_lastfetchedat.sql
+│     └─ 006_posts.sql
 └─ sqlc.yaml
 
 ```
