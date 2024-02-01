@@ -1,6 +1,9 @@
 package router
 
 import (
+	"time"
+
+	"github.com/bkojha74/rssagg/backgroundjob"
 	"github.com/bkojha74/rssagg/helper"
 	"github.com/bkojha74/rssagg/middleware"
 	"github.com/gorilla/mux"
@@ -15,6 +18,8 @@ func initDB() *helper.DBConfig {
 func NewRouter() *mux.Router {
 	router := mux.NewRouter()
 	db := initDB()
+
+	go backgroundjob.StartScrapping(db.DB, 10, time.Minute)
 
 	s := mux.NewRouter().PathPrefix("/api").Subrouter()
 	s.HandleFunc("/hello", helper.MessageHandler).Methods("GET")

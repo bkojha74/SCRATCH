@@ -11,6 +11,12 @@ import (
 )
 
 func main() {
+	/*feed, err := rss.UrlToFeed("https://timesofindia.indiatimes.com/rssfeedstopstories.cms")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(feed)*/
+
 	godotenv.Load(".env")
 
 	portString := os.Getenv("PORT")
