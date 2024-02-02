@@ -16,7 +16,7 @@ As a developer, it's important to stay abreast of the latest trends and best pra
 This project is a scratchpad for me to write down my ideas and code snippets.
 
 # Purpose
-The purpose of this project is to aggregate data from RSS Feeds. RSS is protocol that makes distributing things like podcast and blogpost really easy. Add different RSS feeds to its database. So that Application automatically collects all of the posts from those feeds and download and save them to Database. So that we can view it later.
+The purpose of this project is to aggregate data from RSS Feeds. RSS is a protocol that makes distributing things like podcast and blogpost really easy. Our server allow users to add different RSS feeds to its database. And then it will go automatically collect all of the posts from those feeds and download and save them to the Database. So that we can view it later.
 
 # Features
 - Aggregate RSS Feeds
