@@ -14,20 +14,31 @@ As a developer, it's important to stay abreast of the latest trends and best pra
 
 # About
 This project is a scratchpad for me to write down my ideas and code snippets.
-It is Backend project which is written in Golang.
-It aggregate data from RSS Feeds using REST APIs.
-It uses Keycloak for authentication and authorization.
-It uses PostgreSQL for database.
-It uses Sqlc for database migration.    
-It uses Goose for database migration.
 
-# Software required
+# Purpose
+The purpose of this project is to aggregate data from RSS Feeds. RSS is protocol that makes distributing things like podcast and blogpost really easy. Add different RSS feeds to its database. So that Application automatically collects all of the posts from those feeds and download and save them to Database. So that we can view it later.
+
+# Features
+- Aggregate RSS Feeds
+- Download and save posts
+- Simple, user-friendly interface
+- Ability to add, remove, and manage RSS feeds
+- Notifications for new posts
+- Search and filter posts
+
+# Technologies used
+- Golang
+- PostgreSQL
+- React
+- React Hook Form
+- React Query
+
+# Pre-requisites
 - Golang
 - Keycloak (https://www.keycloak.org/)
 - PostgreSQL with pgAdmin4 or any other GUI tool for database management (https://www.postgresql.org/)
 - Sqlc (https://github.com/sqlc-dev/sqlc)
 - Goose (https://github.com/pressly/goose)
-
 
 # How to run
 - Clone this repository
@@ -45,7 +56,6 @@ It uses Goose for database migration.
 - ./SCRATCH
 
 # Structure
-
 ```
 SCRATCH
 ├─ .gitignore
