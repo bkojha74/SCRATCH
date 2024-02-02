@@ -29,9 +29,6 @@ The purpose of this project is to aggregate data from RSS Feeds. RSS is a protoc
 # Technologies used
 - Golang
 - PostgreSQL
-- React
-- React Hook Form
-- React Query
 
 # Pre-requisites
 - Golang
