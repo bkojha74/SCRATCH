@@ -1,6 +1,8 @@
 package router
 
 import (
+	"net/http"
+	"os"
 	"time"
 
 	"github.com/bkojha74/rssagg/backgroundjob"
@@ -32,7 +34,9 @@ func NewRouter() *mux.Router {
 	s.HandleFunc("/feed_follows/{feed_follow_id}", db.MiddlewareAuth(db.DeleteFeedFollowHandler)).Methods("DELETE")
 	s.HandleFunc("/posts", db.MiddlewareAuth(db.GetPostsForUserHandler)).Methods("GET")
 
-	s.Use(middleware.HttpLogger)
+	s.Use(func(next http.Handler) http.Handler {
+		return middleware.HttpLogger(os.Stdout, next)
+	})
 
 	router.PathPrefix("/api").Handler(s)
 

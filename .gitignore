@@ -1,3 +1,5 @@
 thunder-tests/
 rssagg.exe
 .env
+.env.test
+internal/database/
